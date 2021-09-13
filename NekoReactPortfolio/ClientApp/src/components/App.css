@@ -1,0 +1,23 @@
+﻿body {
+}
+
+.carousel {
+    width:0px;
+
+}
+
+.carousel-slider {
+    width: 100%;
+}
+
+.control-dots {
+    visibility:hidden;
+}
+
+.control-arrow {
+    visibility: hidden;
+}
+
+.carousel-status {
+    visibility: hidden;
+}
