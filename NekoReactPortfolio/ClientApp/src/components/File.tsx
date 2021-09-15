@@ -10,6 +10,7 @@ import 'photoswipe/dist/default-skin/default-skin.css';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const File = ({ Props }) => {
     const [item, setItem] = useState({ id:"", Title: "", PostId: [{}],Excerpt: "", URL: "", LightBoxURL: "", FileType: "", Medium: [{}], Category: [{}], CreatedBy: [{}], DateCreated: "", Rating:""});
@@ -31,6 +32,7 @@ const File = ({ Props }) => {
             backgroundColor: theme.palette.background.paper,
         },
         image: {
+            cursor: 'pointer',
             maxHeight: '300px',
             width: 'auto',
             height: '100%',
@@ -61,6 +63,13 @@ const File = ({ Props }) => {
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
         },
+        imageModal: {
+            maxWidth: '80%',
+            maxHeight:'80%',
+        },
+        imageModalwdth: {
+            width: '100%',
+        },
     }));
 
     const handleOpen = () => {
@@ -87,7 +96,9 @@ const File = ({ Props }) => {
     }
 
     return (
-        <div><ImageListItem className={classes.item} key={item.id}>
+        <div>{item.id==="" && <Skeleton variant="rect" className={classes.image} />}
+            <ImageListItem className={classes.item} key={item.id}>
+            
             <img className={classes.image} src={"https://nekoportfoliofiles.blob.core.windows.net/portfolio-files/" + item.URL} alt={item.Title} onClick={handleOpen}/>
             <ImageListItemBar className={classes.title}
                     title={item.Title}
@@ -106,8 +117,8 @@ const File = ({ Props }) => {
                 BackdropProps={{
                     timeout: 500,
                 }}
-            ><div>
-                    <img src={"https://nekoportfoliofiles.blob.core.windows.net/portfolio-files/" + item.LightBoxURL} alt={item.Title} />
+            ><div className={classes.imageModal}>
+                    <img className={classes.imageModalwdth} src={"https://nekoportfoliofiles.blob.core.windows.net/portfolio-files/" + item.LightBoxURL} alt={item.Title} />
                     
                 <Fade in={open}>
                     <div className={classes.paper}>

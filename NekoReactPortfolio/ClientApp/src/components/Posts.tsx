@@ -3,11 +3,12 @@ import { Console } from "console";
 import React, { useEffect, useState } from "react";
 import { Input } from "reactstrap";
 import PostsFiles from "./PostsFilesContainer";
-import { Card, CardActions, CardContent, CardHeader, IconButton, makeStyles, Typography } from "@material-ui/core";
+import { Box, Card, CardActions, CardContent, CardHeader, IconButton, makeStyles, Typography } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const PostManagement = () => {
     const [myPosts, setPosts] = useState({});
@@ -58,6 +59,7 @@ const PostManagement = () => {
                 />
                 <PostsFiles Props={response.id} />
                 <CardContent>
+                    
                     <Typography variant="body2" color="textSecondary" component="p">
                         { response.PostDesc }
                     </Typography>
@@ -77,7 +79,8 @@ const PostManagement = () => {
                 {/*        <ExpandMoreIcon />*/}
                 {/*    </IconButton>*/}
                 {/*</CardActions>*/}
-            </Card></div></div>)
+            </Card></div>
+            </div>)
         }
         else {
             return <div></div>
@@ -99,6 +102,30 @@ const PostManagement = () => {
     return (
         <div>
             <div>
+                {myPosts === ({}) && <div><div>
+                  <Skeleton variant="rect" width="80%" height={200} />
+                 <Box pt={0.5}>
+                    <Skeleton />
+                    <Skeleton width="60%" />
+                    </Box></div>
+                <div>
+                  <Skeleton variant="rect" width="80%" height={200} />
+                 <Box pt={0.5}>
+                    <Skeleton />
+                    <Skeleton width="60%" />
+                </Box></div>
+                <div>
+                  <Skeleton variant="rect" width="80%" height={200} />
+                 <Box pt={0.5}>
+                    <Skeleton />
+                    <Skeleton width="60%" />
+                </Box></div>
+                <div>
+                  <Skeleton variant="rect" width="80%" height={200} />
+                 <Box pt={0.5}>
+                    <Skeleton />
+                    <Skeleton width="60%" />
+                </Box></div></div>}
                 <div className="Files">{maptype(myPosts)}</div>
             </div>
         </div>
