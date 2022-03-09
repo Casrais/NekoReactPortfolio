@@ -7,17 +7,17 @@ import { FormControlLabel, ImageList, makeStyles, Switch } from "@material-ui/co
 import Grow from '@material-ui/core/Grow';
 import Collapse from '@material-ui/core/Collapse';
 
-const FileUpdate = ({ Props }) => {
+const FileUpdate = ({ Props, user }) => {
     const [FileContainer, setFileContainer] = useState({});
     const [checked, setChecked] = React.useState(false);
-
 
     const handleChange = () => {
         setChecked((prev) => !prev);
     };
 
     const RetrieveData = async (id) => {
-        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/PostFiles/` + id).then(response => { setFileContainer(response.data.Items);});
+        const token = user.token;
+        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/PostFiles/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setFileContainer(response.data.Items);});
     }
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const FileUpdate = ({ Props }) => {
 
     const maptype = function (myPosts) {
         if (Object.keys(myPosts).length !== 0) {
-            return myPosts.map((response, idx) => <div><div className="ItemRow" key={idx}><File Props={response.id} /></div></div>)
+            return myPosts.map((response, idx) => <div><div className="ItemRow" key={idx}><File Props={response.id} user={user} /></div></div>)
         }
         else {
             return <div></div>

@@ -10,13 +10,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const PostManagement = () => {
+const PostManagement = ({user}) => {
     const [myPosts, setPosts] = useState({});
 
-
-
     const RetrieveData = async () => {
-        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/Post`).then(response => { setPosts(response.data.Items);});
+        const token = user.token;
+        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/Post`, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setPosts(response.data.Items);});
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -57,7 +56,7 @@ const PostManagement = () => {
                     title={response.PostTitle}
                     subheader={ dateConvert(response.PostDate)}
                 />
-                <PostsFiles Props={response.id} />
+                <PostsFiles Props={response.id} user={user} />
                 <CardContent>
                     
                     <Typography variant="body2" color="textSecondary" component="p">
@@ -100,7 +99,7 @@ const PostManagement = () => {
     }
 
     return (
-        <div>
+        <div className="indFront">
             <div>
                 {myPosts === ({}) && <div><div>
                   <Skeleton variant="rect" width="80%" height={200} />

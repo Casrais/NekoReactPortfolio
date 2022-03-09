@@ -4,20 +4,23 @@ import React, { useEffect, useState } from "react";
 import { Input } from "reactstrap";
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
 import 'photoswipe/dist/photoswipe.css';
 import 'photoswipe/dist/default-skin/default-skin.css';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Rating from '@material-ui/lab/Rating';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
-const File = ({ Props }) => {
-    const [item, setItem] = useState({ id:"", Title: "", PostId: [{}],Excerpt: "", URL: "", LightBoxURL: "", FileType: "", Medium: [{}], Category: [{}], CreatedBy: [{}], DateCreated: "", Rating:""});
+const File = ({ Props, user }) => {
+    const [item, setItem] = useState({ id:"", Title: "", PostId: [{}],Excerpt: "", URL: "", LightBoxURL: "", FileType: "", Medium: [{}], Category: [{}], CreatedBy: [{}], DateCreated: "", Rating:0});
     const [open, setOpen] = React.useState(false);
 
     const RetrieveData = async (id) => {
-        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/File/` + id).then(response => { setItem(response.data.Items[Object.keys(response.data.Items)[0]]);});
+        const token = user.token;
+        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/File/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setItem(response.data.Items[Object.keys(response.data.Items)[0]]);});
     }
 
     useEffect(() => {
@@ -89,6 +92,15 @@ const File = ({ Props }) => {
             maxHeight: '100%',
     }
 
+    const StyledRating = withStyles({
+        iconFilled: {
+            color: '#ff6d75',
+        },
+        iconHover: {
+            color: '#ff3d47',
+        },
+    })(Rating);
+
     const dateConvert = (dateinput) => {
         var date = new Date(dateinput);
         var DateCon = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
@@ -123,7 +135,8 @@ const File = ({ Props }) => {
                 <Fade in={open}>
                     <div className={classes.paper}>
                             <h2 id="transition-modal-title">{ item.Title+" - "+ dateConvert(item.DateCreated)}</h2>
-                            <p id="transition-modal-description">{ item.Excerpt }</p>
+                            <p id="transition-modal-description">{item.Excerpt}</p>
+                            <div><h3>Neko's rating:</h3><StyledRating value={item.Rating / 2.00} readOnly precision={0.1} icon={<FavoriteIcon fontSize="inherit" />}/></div>
                     </div>
                 </Fade>
                 </div>

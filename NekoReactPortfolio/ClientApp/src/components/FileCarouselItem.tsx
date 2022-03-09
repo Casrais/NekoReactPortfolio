@@ -29,8 +29,9 @@ const FileCarouselItem = ({ Props }) => {
             backgroundColor: theme.palette.background.paper,
         },
         image: {
+            zIndex: 4,
             width: '100%',
-            height: '200px',
+            height: '100%',
             transform: 'translateY(0%)',
             left:'0%',
         },
@@ -59,7 +60,8 @@ const FileCarouselItem = ({ Props }) => {
             padding: theme.spacing(2, 4, 3),
         },
         Carousel: {
-            height: '200px',
+            zIndex:4,
+            height: 'auto',
             width: '100%',
         }
     }));
