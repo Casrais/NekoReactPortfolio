@@ -23,8 +23,7 @@ const toggle = () => {
                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={state.isOpen} navbar>
                     <ul className="navbar-nav flex-grow">
                             <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                            {Props.username != '' ? (<div>Welcome {Props.username}!<NavLink tag={Link} className="text-dark" to="/login">Log Out</NavLink></div>) : (<NavLink tag={Link} className="text-dark" to="/login">Sign In</NavLink>)}
+                            {Props.username != '' ? (<div>Welcome {Props.username}!<NavLink tag={Link} className="text-dark" to="/logout">Log Out</NavLink></div>) : (<div><NavLink tag={Link} className="text-dark" to="/login">Sign In</NavLink><NavLink tag={Link} className="text-dark" to="/register">Register</NavLink></div>)}
                         </NavItem>
                     </ul>
                 </Collapse>
