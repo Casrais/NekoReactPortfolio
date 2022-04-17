@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.9" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.2">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -31,6 +31,10 @@
     <None Remove="ClientApp\src\components\LogOut.tsx" />
     <None Remove="ClientApp\src\components\NavMenu.tsx" />
     <None Remove="ClientApp\src\components\RegisterForm.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\components\ValidationErrors.tsx" />
   </ItemGroup>
 
   <ItemGroup>

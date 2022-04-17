@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Console } from "console";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState }, { FC } from "react";
 import { Input } from "reactstrap";
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
@@ -14,7 +14,11 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-const File = ({ Props, user }) => {
+interface iProps {
+    id: string;
+}
+
+const File : FC<iProps> = ({ Props, user }) => {
     const [item, setItem] = useState({ id:"", Title: "", PostId: [{}],Excerpt: "", URL: "", LightBoxURL: "", FileType: "", Medium: [{}], Category: [{}], CreatedBy: [{}], DateCreated: "", Rating:0});
     const [open, setOpen] = React.useState(false);
 
@@ -24,7 +28,7 @@ const File = ({ Props, user }) => {
     }
 
     useEffect(() => {
-    RetrieveData(Props)
+    RetrieveData(Props.id)
     }, []);
 
     const useStyles = makeStyles((theme) => ({

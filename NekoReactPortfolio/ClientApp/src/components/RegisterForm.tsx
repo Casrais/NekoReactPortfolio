@@ -13,13 +13,18 @@ import { Redirect } from 'react-router-dom';
 export default function RegisterForm({ParentCallBack})
 {
 
-const [redirect, setRedirect] = useState({ goHome: false})
+    const [redirect, setRedirect] = useState({ goHome: false })
+    const [Errors, setErrors] = useState({})
 
 const register = async (creds: UserFormValues) => {
     try {
-    const user = await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/register`, creds);
-    ParentCallBack(user.data);
-    setRedirect({ goHome: true });
+        await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/register`, creds).catch(error => setErrors({ error }));
+        if (Errors) {
+            const user = await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/login`, creds);
+            ParentCallBack(user.data);
+            setRedirect({ goHome: true });
+        }
+        
     }
     catch (error) {throw error;}
 }
@@ -34,12 +39,14 @@ const register = async (creds: UserFormValues) => {
                    <Formik initialValues={{
                     username: '', email: '', password: ''
         }} onSubmit={values => register(values)} >
-            {({ handleSubmit, isSubmitting }) => (
-                <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' translate>
+            {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' translate>
+                            <ErrorMessage name='error' render={() => <ValidationErrors errors={ Errors.error }/> } />
                     <MyTextInput name='username' placeholder='UserName' />
                     <MyTextInput name='email' placeholder='Email' />
-                            <MyTextInput name='password' placeholder='Password' type='password' />
-                            <Button loading={isSubmitting} positive content='Register' type='submit' fluid />
+                    <MyTextInput name='password' placeholder='Password' type='password' />
+                    <Button disabled={isSubmitting || !dirty || !isValid} 
+                            loading={isSubmitting} positive content='Register' type='submit' fluid />
                 </Form>
             )}
         </Formik> 
