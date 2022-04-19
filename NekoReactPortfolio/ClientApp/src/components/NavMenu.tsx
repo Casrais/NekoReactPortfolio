@@ -1,18 +1,32 @@
 ﻿import { Link } from "react-router-dom"
-import React, { useEffect, useState } from "react";
+import React, * as react from "react";
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import './NavMenu.css';
 
+interface iProps {
+    userdata: { username: string;
+            displayName: string;
+            token: string | null;
+            }
+    
+}
 
-const NavMenu = ({ Props }) => {
+const NavMenu : react.FC<iProps> = ({ userdata }) => {
 
-    const [state, setState] = useState({ isOpen: false })
+    const [state, setState] = react.useState({ isOpen: false })
 
 const toggle = () => {
        setState({
             isOpen: !state.isOpen
         });
     }
+
+const displayUserName = (usernm : iProps["userdata"]) => {
+                                        if(usernm.username) {
+                                                                return( <div>Welcome {usernm.username}!<NavLink tag={Link} className="text-dark" to="/logout">Log Out</NavLink></div>) 
+                                                                } else 
+                                        { return( <div><NavLink tag={Link} className="text-dark" to="/login">Sign In</NavLink><NavLink tag={Link} className="text-dark" to="/register">Register</NavLink></div>)}
+                                      }
 
     return (
     <header>
@@ -23,7 +37,7 @@ const toggle = () => {
                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={state.isOpen} navbar>
                     <ul className="navbar-nav flex-grow">
                             <NavItem>
-                            {Props.username != '' ? (<div>Welcome {Props.username}!<NavLink tag={Link} className="text-dark" to="/logout">Log Out</NavLink></div>) : (<div><NavLink tag={Link} className="text-dark" to="/login">Sign In</NavLink><NavLink tag={Link} className="text-dark" to="/register">Register</NavLink></div>)}
+                            {displayUserName(userdata)}
                         </NavItem>
                     </ul>
                 </Collapse>
@@ -34,4 +48,3 @@ const toggle = () => {
 };
 
 export default NavMenu;
-//

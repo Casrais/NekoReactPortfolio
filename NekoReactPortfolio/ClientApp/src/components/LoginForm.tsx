@@ -1,53 +1,70 @@
-﻿import { CardContent } from '@material-ui/core';
-import { Card, CardHeader } from '@material-ui/core';
-import { Form, Formik } from 'formik';
-import React, { useEffect, useState } from "react";
+﻿import { Card } from 'react-bootstrap';;
+import { Form as FormikForm, Formik } from 'formik';
+import React, * as react from "react";
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-import MyTextInput from './MyTextInput';
 import Posts from "./Posts";
+import ValidationErrors from "./ValidationErrors";
 import {UserFormValues} from "../models/user";
 import axios from "axios";
 import { Redirect } from 'react-router-dom';
+import { Form } from "react-bootstrap";
 
-export default function LoginForm({ParentCallBack})
+interface iProps {
+ParentCallBack: any;
+}
+
+interface iError { errors : [{}] }
+
+const LoginForm : react.FC<iProps> = ({ParentCallBack}) =>
 {
 
-const [redirect, setRedirect] = useState({ goHome: false})
-
+const [redirect, setRedirect] = react.useState({ goHome: false})
+const [Errors, setErrors] = react.useState<iError>({errors: [{error:""}]})
+const [FormValues, setFormValues] = react.useState<UserFormValues>({ username: "", email: "", password: ""})
 
 const login = async (creds: UserFormValues) => {
     try {
-    const user = await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/login`, creds);
-    ParentCallBack(user.data);
-    setRedirect({ goHome: true })
-    }
+        await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/login`, creds).catch(error => setErrors({ errors: error }));
+        if (!Errors.errors[0]) {
+            const user = await axios.post(`https://nekocosmosapi.azurewebsites.net/api/Account/login`, creds);
+            ParentCallBack(user.data);
+            setRedirect({ goHome: true });
+        }
+}
     catch (error) {throw error;}
 }
 
     return (
 
         <Card>
-                <CardHeader
+                <Card.Header
                     title="Log in!"
                 />
-                <CardContent>
-                   <Formik initialValues={{
-                    username: '', email: '', password: ''
-        }} onSubmit={values => login(values)} >
-            {({ handleSubmit, isSubmitting }) => (
-                <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' translate>
-                    <MyTextInput name='email' placeholder='Email' />
-                            <MyTextInput name='password' placeholder='Password' type='password' />
+            <Card.Body>
+                <Form className='ui form' onSubmit={login(FormValues)} autoComplete='off'>
+                    <ValidationErrors errors={ Errors.errors }/>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control name="email" type="email" placeholder="Enter email" />
+                                <Form.Text className="text-muted">
+                                    We'll never share your email with anyone else.
+                                </Form.Text>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control name = "password" type="password" placeholder="Password" />
+                            </Form.Group>
                             <Button loading={isSubmitting} positive content='Login' type='submit' fluid />
                 </Form>
-            )}
-        </Formik> 
                     
-                </CardContent>
+                </Card.Body>
             { redirect.goHome ? (<Redirect push to="/home"/>) : null }
             </Card>
 
         
         )
 }
+
+export default LoginForm;

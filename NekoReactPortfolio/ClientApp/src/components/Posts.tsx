@@ -1,47 +1,34 @@
 import axios from "axios";
 import { Console } from "console";
-import React, { useEffect, useState } from "react";
+import React, * as react from "react";
 import { Input } from "reactstrap";
 import PostsFiles from "./PostsFilesContainer";
-import { Box, Card, CardActions, CardContent, CardHeader, IconButton, makeStyles, Typography } from "@material-ui/core";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { Card } from 'react-bootstrap';
 
-const PostManagement = ({user}) => {
-    const [myPosts, setPosts] = useState({});
+interface iProps {
+    user: {
+        username: string;
+        displayName: string;
+        token: string | null;
+    };
+}
+
+interface iPost {
+     response: [{   PostTitle : string;
+                    PostDate : Date;
+                    id: string;
+                    PostDesc: string;
+                    }]
+    };
+
+const PostManagement : react.FC<iProps> = ({user}) => {
+    const [myPosts, setPosts] = react.useState<iPost>({response : [{PostTitle: "", PostDate: new Date("1/1/1900"), id: "", PostDesc: ""}]});
 
     const RetrieveData = async () => {
         const token = user.token;
         await axios.get(`https://nekocosmosapi.azurewebsites.net/api/Post`, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setPosts(response.data.Items);});
     }
 
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            width: '100%',
-            margin: '1em',
-            height:'auto',
-        },
-        media: {
-            height: 0,
-            paddingTop: '56.25%', // 16:9
-        },
-        expand: {
-            transform: 'rotate(0deg)',
-            marginLeft: 'auto',
-            transition: theme.transitions.create('transform', {
-                duration: theme.transitions.duration.shortest,
-            }),
-        },
-        expandOpen: {
-            transform: 'rotate(180deg)',
-        }
-    }));
-
-
-    const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -49,35 +36,14 @@ const PostManagement = ({user}) => {
     };
 
 
-    const maptype = function (myPosts) {
+    const maptype = function (myPosts : iPost["response"]) {
         if (Object.keys(myPosts).length !== 0) {
-            return myPosts.map((response, idx) => <div><div className="ItemRow" key={idx}><Card className={classes.root}>
-                <CardHeader
-                    title={response.PostTitle}
-                    subheader={ dateConvert(response.PostDate)}
-                />
+            return myPosts.map((response, idx) => <div><div className="ItemRow" key={idx}><Card className="root">
+                <Card.Title> {response.PostTitle} { dateConvert(response.PostDate)}</Card.Title>
                 <PostsFiles Props={response.id} user={user} />
-                <CardContent>
-                    
-                    <Typography variant="body2" color="textSecondary" component="p">
+                <Card.Body>
                         { response.PostDesc }
-                    </Typography>
-                </CardContent>
-                {/*<CardActions disableSpacing>*/}
-                {/*    <IconButton aria-label="add to favorites">*/}
-                {/*        <FavoriteIcon />*/}
-                {/*    </IconButton>*/}
-                {/*    <IconButton aria-label="share">*/}
-                {/*        <ShareIcon />*/}
-                {/*    </IconButton>*/}
-                {/*    <IconButton*/}
-                {/*        onClick={handleExpandClick}*/}
-                {/*        aria-expanded={expanded}*/}
-                {/*        aria-label="show more"*/}
-                {/*    >*/}
-                {/*        <ExpandMoreIcon />*/}
-                {/*    </IconButton>*/}
-                {/*</CardActions>*/}
+                </Card.Body>
             </Card></div>
             </div>)
         }
@@ -88,11 +54,11 @@ const PostManagement = ({user}) => {
     }
 
 
-    useEffect(() => {
+    react.useEffect(() => {
     RetrieveData()
 }, []);
 
-    const dateConvert = (dateinput) => {
+    const dateConvert = (dateinput : Date) => {
         var date = new Date(dateinput);
         var DateCon = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
         return DateCon
@@ -101,31 +67,7 @@ const PostManagement = ({user}) => {
     return (
         <div className="indFront">
             <div>
-                {myPosts === ({}) && <div><div>
-                  <Skeleton variant="rect" width="80%" height={200} />
-                 <Box pt={0.5}>
-                    <Skeleton />
-                    <Skeleton width="60%" />
-                    </Box></div>
-                <div>
-                  <Skeleton variant="rect" width="80%" height={200} />
-                 <Box pt={0.5}>
-                    <Skeleton />
-                    <Skeleton width="60%" />
-                </Box></div>
-                <div>
-                  <Skeleton variant="rect" width="80%" height={200} />
-                 <Box pt={0.5}>
-                    <Skeleton />
-                    <Skeleton width="60%" />
-                </Box></div>
-                <div>
-                  <Skeleton variant="rect" width="80%" height={200} />
-                 <Box pt={0.5}>
-                    <Skeleton />
-                    <Skeleton width="60%" />
-                </Box></div></div>}
-                <div className="Files">{maptype(myPosts)}</div>
+                <div className="Files">{myPosts.response && maptype(myPosts.response)}</div>
             </div>
         </div>
     );

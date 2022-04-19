@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 //import { connect } from 'react-redux';
 //import axios from "axios";
 //import Posts from "./Posts";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+//import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 //import { Carousel } from 'react-responsive-carousel';
-import { makeStyles } from "@material-ui/core";
-//import Modal from '@material-ui/core/Modal';
-//import Backdrop from '@material-ui/core/Backdrop';
-//import Fade from '@material-ui/core/Fade';
+//import { makeStyles } from "@mui/base";
+//import Modal from '@mui/base/Modal';
+//import Backdrop from '@mui/base/Backdrop';
+//import Fade from '@mui/base/Fade';
 /*import FileCarouselItem from "./FileCarouselItem";*/
 import "./App.css";
 
@@ -21,71 +21,6 @@ const CarouselFiles = ({  }) => {
     //useEffect(() => {
     //    RetrieveData()
     //}, []);
-
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            position:'absolute',
-            width: '100%',
-            height: '100%',
-            zIndex: -1,
-            backgroundColor:'black',
-        },
-        image: {
-            width: '100%',
-            height: '100%',
-            transform: 'translateY(0%)',
-            left: '0%',
-        },
-        title: {
-            position: 'absolute',
-            width: 'auto',
-        },
-        item: {
-            overflow: 'hidden',
-            borderRadius: '1em',
-            position: 'relative',
-            height: '100%',
-
-            width: '100%',
-            flex: 'shrink',
-        },
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        paper: {
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
-        slide: {
-            minWidth:'0px',
-        },
-        Carousel: {
-            zIndex: -1,
-            display:'flex',
-            minWidth: '0px',
-            margin: '0em',
-            padding: '0em',
-            height: '100%',
-            overflow: 'hidden',
-            background: 'linear - gradient(13deg, rgba(2, 0, 36, 1) 0 %, rgba(7, 7, 96, 1) 35 %, rgba(0, 212, 255, 0.35057773109243695) 100 %)',
-
-        },
-        Container: {
-            zIndex: 3,
-            position: 'absolute',
-            background: 'linear - gradient(13deg, rgba(2, 0, 36, 1) 0 %, rgba(7, 7, 96, 1) 35 %, rgba(0, 212, 255, 0.35057773109243695) 100 %)',
-            width: '100%',
-            height: '100%',
-            margin: '0em',
-            padding: '0em',
-        }
-    }));
-
-    const classes = useStyles();
 
     const smallItemStyles: React.CSSProperties = {
         cursor: 'pointer',
@@ -150,9 +85,9 @@ const CarouselFiles = ({  }) => {
     //}
 
     return (
-        <div className={classes.root}>
-            <div className={classes.Container}></div>
-            {/*<div><Carousel className={classes.Carousel} transitionTime={ 5000 } dynamicHeight={ true } autoPlay={true} infiniteLoop={true} stopOnHover={false} axis="vertical" showThumbs={false} showArrows={false} showStatus={false} showIndicators={false} selectedItem={selectedRange(items) }>*/}
+        <div className="root">
+            <div className="Container"></div>
+            {/*<div><Carousel className="Carousel" transitionTime={ 5000 } dynamicHeight={ true } autoPlay={true} infiniteLoop={true} stopOnHover={false} axis="vertical" showThumbs={false} showArrows={false} showStatus={false} showIndicators={false} selectedItem={selectedRange(items) }>*/}
             {/*{maptype(items)}*/}
         {/*</Carousel></div>*/}
             </div>
