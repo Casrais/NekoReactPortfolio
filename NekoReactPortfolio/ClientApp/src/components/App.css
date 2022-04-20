@@ -96,3 +96,7 @@
 .expandOpen {
     transform: rotate(180deg);
 }
+
+.Card {
+    margin-bottom: .5em;
+}

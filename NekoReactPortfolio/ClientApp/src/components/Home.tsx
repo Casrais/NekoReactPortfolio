@@ -19,9 +19,7 @@ return (
 <div style={{margin: "1em"}}>
     {userdata.username == '' ? (
         <Card>
-            <Card.Header
-                title="Log in!"
-            />
+            <Card.Header title="Log in!">Log In!</Card.Header>
             <Card.Body>
                 <Button as={Link} to='Login' size='huge' inverted>
             Log in to see my art!

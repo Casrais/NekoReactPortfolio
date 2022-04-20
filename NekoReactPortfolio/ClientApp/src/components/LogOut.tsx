@@ -34,12 +34,9 @@ react.useEffect( () => {
 return (
 <div style={{margin: "1em"}}>
         <Card>
-            <Card.Title
-                title="Logged Out!"
-            />
+            <Card.Title title="Logged Out!">Logged Out!</Card.Title>
             <Card.Body>
             You are logged out now. Have a nice day!
-
             </Card.Body>
         </Card>
 </div>

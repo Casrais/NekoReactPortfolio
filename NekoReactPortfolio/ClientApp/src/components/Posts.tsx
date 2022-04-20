@@ -14,19 +14,19 @@ interface iProps {
 }
 
 interface iPost {
-     response: [{   PostTitle : string;
-                    PostDate : Date;
-                    id: string;
+     Items: [{      id : string;
+                    PostTitle : string;
                     PostDesc: string;
+                    PostDate : Date;
                     }]
     };
 
 const PostManagement : react.FC<iProps> = ({user}) => {
-    const [myPosts, setPosts] = react.useState<iPost>({response : [{PostTitle: "", PostDate: new Date("1/1/1900"), id: "", PostDesc: ""}]});
+    const [myPosts, setPosts] = react.useState<iPost>({Items : [{id: "",PostTitle: "", PostDate: new Date("1/1/1900"),  PostDesc: ""}]});
 
     const RetrieveData = async () => {
         const token = user.token;
-        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/Post`, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setPosts(response.data.Items);});
+        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/Post`, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { if(response.data) {setPosts(response.data)};});
     }
 
     const [expanded, setExpanded] = React.useState(false);
@@ -36,16 +36,22 @@ const PostManagement : react.FC<iProps> = ({user}) => {
     };
 
 
-    const maptype = function (myPosts : iPost["response"]) {
+    const maptype = function (myPosts : iPost["Items"]) {
+        if (myPosts != null) {
         if (Object.keys(myPosts).length !== 0) {
-            return myPosts.map((response, idx) => <div><div className="ItemRow" key={idx}><Card className="root">
-                <Card.Title> {response.PostTitle} { dateConvert(response.PostDate)}</Card.Title>
-                <PostsFiles Props={response.id} user={user} />
-                <Card.Body>
-                        { response.PostDesc }
-                </Card.Body>
+            return myPosts.map((myPosts, idx) => <div><div className="ItemRow" key={idx}>
+                <Card className="Card">
+                    <Card.Header> {myPosts.PostTitle} { dateConvert(myPosts.PostDate)}</Card.Header>
+                    <Card.Body>
+                            <PostsFiles Props={myPosts.id} user={user} />
+                            <div>{ myPosts.PostDesc }</div>
+                    </Card.Body>
             </Card></div>
             </div>)
+        }
+        else {
+            return <div></div>
+        }
         }
         else {
             return <div></div>
@@ -58,6 +64,10 @@ const PostManagement : react.FC<iProps> = ({user}) => {
     RetrieveData()
 }, []);
 
+react.useEffect(() => {
+    RetrieveData()
+}, [user]);
+
     const dateConvert = (dateinput : Date) => {
         var date = new Date(dateinput);
         var DateCon = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
@@ -67,7 +77,7 @@ const PostManagement : react.FC<iProps> = ({user}) => {
     return (
         <div className="indFront">
             <div>
-                <div className="Files">{myPosts.response && maptype(myPosts.response)}</div>
+                <div className="Files">{myPosts.Items && maptype(myPosts.Items)}</div>
             </div>
         </div>
     );
