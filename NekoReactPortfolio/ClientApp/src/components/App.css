@@ -100,3 +100,30 @@
 .Card {
     margin-bottom: .5em;
 }
+
+.carousel {
+    position: inherit;
+    width: 100%;
+    background-color: lightslategray;
+}
+.visually-hidden {
+    visibility:hidden;
+}
+
+.carousel-item {
+    height: 100%;
+    width: auto;
+    z-index: 6;
+    display: contents;
+}
+
+.Rating {
+    color: salmon;
+    display: flex;
+}
+
+.figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

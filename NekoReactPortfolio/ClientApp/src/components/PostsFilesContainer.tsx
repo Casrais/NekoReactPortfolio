@@ -8,15 +8,15 @@ import * as bootstrap from "react-bootstrap";
 interface iFiles {Items: [{
     id: string | null;
     Title: string;
-    PostId: [{id : string}];
+    PostId: null;
     Excerpt: string;
     URL: string;
     LightBoxURL: string;
-    FileType: string;
-    Medium: [{id : string}];
-    Category: [{id : string}];
-    CreatedBy: [{id : string}];
-    DateCreated: Date;
+    FileType: null;
+    Medium: null;
+    Category: null;
+    CreatedBy: null;
+    DateCreated: any;
     Rating: number;
 }]}
 
@@ -33,14 +33,14 @@ const FileUpdate : react.FC<iProps> = ({ Props, user }) => {
     const [FileContainer, setFileContainer] = react.useState<iFiles>({Items: [{
         id: "",
         Title: "",
-        PostId: [{id: ""}],
+        PostId: null,
         Excerpt: "",
         URL: "",
         LightBoxURL: "",
-        FileType: "",
-        Medium: [{id: ""}],
-        Category: [{id: ""}],
-        CreatedBy: [{id: ""}],
+        FileType: null,
+        Medium: null,
+        Category: null,
+        CreatedBy: null,
         DateCreated: new Date("1/1/1900"),
         Rating: 0,
 }]});
@@ -58,22 +58,24 @@ const FileUpdate : react.FC<iProps> = ({ Props, user }) => {
 
     const RetrieveData = async (id : string | null) => {
         if(id){
+try {
         const token = user.token;
-        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/PostFiles/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { console.log(response); setFileContainer(response.data)});
+        await axios.get(`https://nekocosmosapi.azurewebsites.net/api/PostFiles/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { setFileContainer(response.data)});
     }
+catch (error) { throw error;}
+}
     }
 
     react.useEffect(() => {
     RetrieveData(Props)
-}, []);
+}, [checked]);
 
 
     const maptype = (files : iFiles["Items"]) => {
         if (Object.keys(files).length !== 0) {
             return files.map((files, idx) => 
-                <div className="ItemRow" key={idx}>
-                <File Props={files.id} user={user} />
-            </div>)}
+                <File Props={files.id} user={user} key={idx}/>
+            )}
         else {
             return  <div><bootstrap.Carousel.Item></bootstrap.Carousel.Item></div>
         }
@@ -88,11 +90,11 @@ const FileUpdate : react.FC<iProps> = ({ Props, user }) => {
     onClick={() => {handleChange()}}
   >click to expand</bootstrap.Button>
 </bootstrap.Form>
-        {checked && <div className="root">
-                <bootstrap.Carousel activeIndex={index} onSelect={handleSelect}>
+            {checked && <bootstrap.Collapse in={checked}>
+                        <div className="root">
                     {maptype(FileContainer.Items)}
-                </bootstrap.Carousel>
-            </div>}
+                </div>
+                </bootstrap.Collapse>}
             </div>
     );
 };

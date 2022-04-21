@@ -30,6 +30,7 @@
     <None Remove="ClientApp\src\components\LoginForm.tsx" />
     <None Remove="ClientApp\src\components\LogOut.tsx" />
     <None Remove="ClientApp\src\components\NavMenu.tsx" />
+    <None Remove="ClientApp\src\components\RateMe.tsx" />
     <None Remove="ClientApp\src\components\RegisterForm.tsx" />
   </ItemGroup>
 

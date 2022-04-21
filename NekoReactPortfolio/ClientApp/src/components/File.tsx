@@ -2,11 +2,10 @@ import axios from "axios";
 import { Console } from "console";
 import React, * as react from "react";
 import { Input } from "reactstrap";
-import 'photoswipe/dist/photoswipe.css';
-import 'photoswipe/dist/default-skin/default-skin.css';
 import { Rating } from '@material-ui/lab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { Modal, Card, Carousel } from 'react-bootstrap';
+import { Modal, Card, Carousel, Image, Figure } from 'react-bootstrap';
+import RateMe from "./RateMe";
 
 
 interface iProps {
@@ -27,7 +26,7 @@ interface iItem {
     Medium: [{id : string}];
     Category: [{id : string}];
     CreatedBy: [{id : string}];
-    DateCreated: Date;
+    DateCreated: any;
     Rating: number;
 }
 
@@ -57,7 +56,7 @@ const File : react.FC<iProps> = ({ Props, user }) => {
 
     react.useEffect(() => {
     RetrieveData(Props)
-    }, []);
+    }, [Props]);
 
 react.useEffect(() => {
     RetrieveData(Props)
@@ -72,13 +71,6 @@ react.useEffect(() => {
     };
 
 
-        const smallItemStyles: React.CSSProperties = {
-            cursor: 'pointer',
-            objectFit: 'cover',
-            width: '100%',
-            maxHeight: '100%',
-    }
-
     const dateConvert = (dateinput : Date) => {
         var date = new Date(dateinput);
         var DateCon = ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear();
@@ -90,22 +82,22 @@ const FileURL = () => {if (item.URL) { return "https://nekoportfoliofiles.blob.c
 const LightboxURL = () => {if (item.LightBoxURL) { return "https://nekoportfoliofiles.blob.core.windows.net/portfolio-files/" + item.LightBoxURL } else { return "" } }
 
     return (
-        <Carousel.Item>
-            <img className="image" src={FileURL()} alt={item.Title} onClick={handleOpen}/>
-            <Carousel.Caption>
+        <Figure>
+            <Image className="image" src={FileURL()} alt={item.Title} onClick={handleOpen} rounded thumbnail/>
+            <Figure.Caption>
           <h3>{item.Title}</h3>
           <p>{item.Excerpt}</p>
-        </Carousel.Caption>
+        </Figure.Caption>
             <Modal show={isOpen} onHide={handleClose}><div className="imageModal">
                     <img className="imageModalwdth" src={LightboxURL()} alt={item.Title} />
                     
                     <Modal.Title>{ item.Title+" - "+ dateConvert(item.DateCreated)}</Modal.Title>
                             <Modal.Footer><p>{item.Excerpt}</p>
-                            <h3>Neko's rating:</h3><Rating value={item.Rating / 2.00} readOnly precision={0.1} icon={<FavoriteIcon fontSize="inherit" />}/>
+                               <RateMe Props={item.id} user={user}/>
                             </Modal.Footer>
                     </div>
             </Modal>
-</Carousel.Item>
+</Figure>
     )
 };
 
