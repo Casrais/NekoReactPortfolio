@@ -50,7 +50,7 @@ const File : react.FC<iProps> = ({ Props, user }) => {
     const RetrieveData = async (id : string | null) => {
         if(id) {
         const token = user.token;
-        var file = await axios.get(`https://nekocosmosapi.azurewebsites.net/api/File/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { console.log(response); if(response.data) { setItem(response.data.Items[Object.keys(response.data.Items)[0]])}});
+        var file = await axios.get(`https://nekocosmosapi.azurewebsites.net/api/File/` + id, { headers: { "Authorization": `Bearer ${token}` } }).then(response => { if(response.data) { setItem(response.data.Items[Object.keys(response.data.Items)[0]])}});
         }
         }
 
